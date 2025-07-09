@@ -4,14 +4,19 @@ import com.uca.parcialfinalncapas.dto.request.UserCreateRequest;
 import com.uca.parcialfinalncapas.dto.request.UserUpdateRequest;
 import com.uca.parcialfinalncapas.dto.response.GeneralResponse;
 import com.uca.parcialfinalncapas.dto.response.UserResponse;
+import com.uca.parcialfinalncapas.entities.Token;
 import com.uca.parcialfinalncapas.entities.User;
 import com.uca.parcialfinalncapas.service.UserService;
+import com.uca.parcialfinalncapas.service.iTokenServices;
 import com.uca.parcialfinalncapas.utils.ResponseBuilderUtil;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +26,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
     private UserService userService;
+    private final iTokenServices TokenServices;
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/all")
     public ResponseEntity<GeneralResponse> getAllUsers() {
@@ -39,10 +46,27 @@ public class UserController {
         return ResponseBuilderUtil.buildResponse("Usuario encontrado", HttpStatus.OK, user);
     }
 
+    @PostMapping("/auth/login")
+    public ResponseEntity<GeneralResponse> login(@RequestBody AccessUserDto userDto) {
+        Authentication auth = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
+
+        Token token = TokenServices.generateToken((User) auth.getPrincipal());
+
+        return ResponseBuilderUtil.buildResponse("Access granted", HttpStatus.CREATED, token.getToken());
+    }
+
+
     @PostMapping
     public ResponseEntity<GeneralResponse> createUser(@Valid @RequestBody UserCreateRequest user) {
         UserResponse createdUser = userService.save(user);
-        return ResponseBuilderUtil.buildResponse("Usuario creado correctamente", HttpStatus.CREATED, createdUser);
+
+        Authentication auth = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(user.getCorreo(), user.getPassword()));
+
+        Token token = TokenServices.generateToken((User) auth.getPrincipal());
+
+        return ResponseBuilderUtil.buildResponse("Usuario creado correctamente", HttpStatus.CREATED, token.getToken());
     }
 
     @PutMapping
