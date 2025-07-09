@@ -2,6 +2,16 @@
 
 Este repositorio contiene un proyecto para evaluar y practicar los conceptos de seguridad en aplicaciones Spring Boot usando JWT, roles y Docker.
 
+# 1. Clonar proyecto
+git clone <REPO_URL>
+cd parcial-final-n-capas
+
+# 2. Ejecutar con Docker
+docker-compose up --build
+
+# 3. Verificar que está corriendo
+docker-compose ps
+
 # CREDENCIALES POR DEFECTO
 - **Correo:** user@gmail.com **Contraseña:** user123
 - **Correo:** tech@gmail.com **Contraseña:** tech123
@@ -69,3 +79,15 @@ _Si van a crear mas endpoints como el login o registrarse recuerden actualizar p
 - [ ] Probar todos los flujos con Postman/Insomnia/Bruno.
 - [ ] Mostrar que los roles se comportan correctamente.
 - [ ] Incluir usuarios de prueba (`user`, `tech`) y contraseñas.
+
+# Ver logs
+docker-compose logs -f support-app
+
+# Reiniciar app
+docker-compose restart support-app
+
+# Parar todo
+docker-compose down
+
+# Reset completo
+docker-compose down -v

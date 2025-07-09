@@ -16,7 +16,7 @@ services:
     networks:
       - support-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U admin"]
       interval: 30s
       timeout: 10s
       retries: 5
