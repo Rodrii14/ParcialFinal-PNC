@@ -49,8 +49,9 @@ public class WebSecurityConfig {
                 }));
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/user/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/users/auth/login").permitAll()
+                .requestMatchers("/user/**").hasRole("USER")
+                .requestMatchers("/tech/**").hasRole("TECH")
                 .anyRequest().authenticated()
         );
 

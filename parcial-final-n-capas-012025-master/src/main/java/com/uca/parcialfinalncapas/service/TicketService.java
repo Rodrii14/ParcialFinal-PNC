@@ -4,6 +4,7 @@ import com.uca.parcialfinalncapas.dto.request.TicketCreateRequest;
 import com.uca.parcialfinalncapas.dto.request.TicketUpdateRequest;
 import com.uca.parcialfinalncapas.dto.response.TicketResponse;
 import com.uca.parcialfinalncapas.dto.response.TicketResponseList;
+import com.uca.parcialfinalncapas.entities.User;
 
 import java.util.List;
 
@@ -45,4 +46,8 @@ public interface TicketService {
      * @return una lista de todos los tickets
      */
     List<TicketResponseList> getAllTickets();
+
+
+    List<TicketResponseList> getAllUserTickets();
+    User getUserSession();
 }

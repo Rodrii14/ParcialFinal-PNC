@@ -16,6 +16,7 @@ import com.uca.parcialfinalncapas.utils.enums.Rol;
 import com.uca.parcialfinalncapas.utils.mappers.TicketMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -101,5 +102,21 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<TicketResponseList> getAllTickets() {
         return TicketMapper.toDTOList(ticketRepository.findAll());
+    }
+
+    @Override
+    public List<TicketResponseList> getAllUserTickets() {
+        return TicketMapper.toDTOList(ticketRepository.findTicketsByUsuarioId(getUserSession().getId()));
+    }
+
+    @Override
+    public User getUserSession() {
+        User userNoSession = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (userNoSession == null){
+            throw new UserNotFoundException("Usuario no encontrado");
+        }
+
+        return userRepository.findByUsername(userNoSession.getUsername());
     }
 }

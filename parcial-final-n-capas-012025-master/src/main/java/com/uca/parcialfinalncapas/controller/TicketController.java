@@ -15,19 +15,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("/")
 @AllArgsConstructor
 public class TicketController {
     private TicketService ticketService;
 
-    @GetMapping
+    @GetMapping("tech/api/tickets")
     public ResponseEntity<GeneralResponse> getAllTickets() {
         return ResponseBuilderUtil.buildResponse("Tickets obtenidos correctamente",
                 ticketService.getAllTickets().isEmpty() ? HttpStatus.BAD_REQUEST : HttpStatus.OK,
                 ticketService.getAllTickets());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("user/api/tickets")
+    public ResponseEntity<GeneralResponse> getAllUserTickets() {
+        return ResponseBuilderUtil.buildResponse("Tickets obtenidos correctamente",
+                ticketService.getAllTickets().isEmpty() ? HttpStatus.BAD_REQUEST : HttpStatus.OK,
+                ticketService.getAllTickets());
+    }
+
+    @GetMapping("{id}")
     public ResponseEntity<GeneralResponse> getTicketById(@PathVariable Long id) {
         TicketResponse ticket = ticketService.getTicketById(id);
         if (ticket == null) {
@@ -36,19 +43,19 @@ public class TicketController {
         return ResponseBuilderUtil.buildResponse("Ticket found", HttpStatus.OK, ticket);
     }
 
-    @PostMapping
+    @PostMapping("user/api/tickets")
     public ResponseEntity<GeneralResponse> createTicket(@Valid @RequestBody TicketCreateRequest ticket) {
         TicketResponse createdTicket = ticketService.createTicket(ticket);
         return ResponseBuilderUtil.buildResponse("Ticket creado correctamente", HttpStatus.CREATED, createdTicket);
     }
 
-    @PutMapping
+    @PutMapping("tech/api/tickets")
     public ResponseEntity<GeneralResponse> updateTicket(@Valid @RequestBody TicketUpdateRequest ticket) {
         TicketResponse updatedTicket = ticketService.updateTicket(ticket);
         return ResponseBuilderUtil.buildResponse("Ticket actualizado correctamente", HttpStatus.OK, updatedTicket);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<GeneralResponse> deleteTicket(@PathVariable Long id) {
         ticketService.deleteTicket(id);
         return ResponseBuilderUtil.buildResponse("Ticket eliminado correctamente", HttpStatus.OK, null);
