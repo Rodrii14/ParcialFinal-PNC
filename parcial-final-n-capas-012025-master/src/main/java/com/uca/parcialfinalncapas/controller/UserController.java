@@ -1,5 +1,6 @@
 package com.uca.parcialfinalncapas.controller;
 
+import com.uca.parcialfinalncapas.dto.AccessUserDto;
 import com.uca.parcialfinalncapas.dto.request.UserCreateRequest;
 import com.uca.parcialfinalncapas.dto.request.UserUpdateRequest;
 import com.uca.parcialfinalncapas.dto.response.GeneralResponse;
