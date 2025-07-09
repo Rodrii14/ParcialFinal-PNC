@@ -26,12 +26,6 @@ public class TokenFilter extends OncePerRequestFilter {
     private final UserService UserServices;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request){
-        String path = request.getServletPath();
-        return path.startsWith("/user/auth") || path.equals("/home");
-    }
-
-    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
         String token = null;

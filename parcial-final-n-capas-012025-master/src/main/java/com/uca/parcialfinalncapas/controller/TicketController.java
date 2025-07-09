@@ -30,8 +30,8 @@ public class TicketController {
     @GetMapping("user/api/tickets")
     public ResponseEntity<GeneralResponse> getAllUserTickets() {
         return ResponseBuilderUtil.buildResponse("Tickets obtenidos correctamente",
-                ticketService.getAllTickets().isEmpty() ? HttpStatus.BAD_REQUEST : HttpStatus.OK,
-                ticketService.getAllTickets());
+                ticketService.getAllUserTickets().isEmpty() ? HttpStatus.BAD_REQUEST : HttpStatus.OK,
+                ticketService.getAllUserTickets());
     }
 
     @GetMapping("{id}")
