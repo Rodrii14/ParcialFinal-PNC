@@ -12,7 +12,7 @@ public class UserMapper {
     public static User toEntityCreate(UserCreateRequest userRequest) {
         return User.builder()
                 .nombre(userRequest.getNombre())
-                .correo(userRequest.getCorreo())
+                .username(userRequest.getCorreo())
                 .password(userRequest.getPassword())
                 .nombreRol(userRequest.getNombreRol())
                 .build();
@@ -31,7 +31,7 @@ public class UserMapper {
         return UserResponse.builder()
                 .idUsuario(user.getId())
                 .nombre(user.getNombre())
-                .correo(user.getCorreo())
+                .correo(user.getUsername())
                 .nombreRol(user.getNombreRol())
                 .build();
     }

@@ -2,6 +2,7 @@ package com.uca.parcialfinalncapas.config;
 
 import com.uca.parcialfinalncapas.entities.User;
 import com.uca.parcialfinalncapas.service.UserService;
+import com.uca.parcialfinalncapas.utils.TokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -21,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class TokenFilter extends OncePerRequestFilter {
 
-    private final TokenUtils  tokenUtils;
+    private final TokenUtils tokenUtils;
     private final UserService UserServices;
 
     @Override
