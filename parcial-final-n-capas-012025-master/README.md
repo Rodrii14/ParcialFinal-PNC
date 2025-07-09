@@ -2,6 +2,10 @@
 
 Este repositorio contiene un proyecto para evaluar y practicar los conceptos de seguridad en aplicaciones Spring Boot usando JWT, roles y Docker.
 
+# CREDENCIALES POR DEFECTO
+- **Correo:** user@gmail.com **Contraseña:** user123
+- **Correo:** tech@gmail.com **Contraseña:** tech123
+
 ### Estudiantes
 - **Nombre del estudiante 1**: David Ernesto Mejia Oliva - 00004722
 - **Nombre del estudiante 2**: Rodrigo Umanzor Velasquez - 00087022
