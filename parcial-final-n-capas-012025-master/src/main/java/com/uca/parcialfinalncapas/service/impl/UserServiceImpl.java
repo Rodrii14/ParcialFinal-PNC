@@ -9,6 +9,8 @@ import com.uca.parcialfinalncapas.repository.UserRepository;
 import com.uca.parcialfinalncapas.service.UserService;
 import com.uca.parcialfinalncapas.utils.mappers.UserMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,15 +21,18 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserResponse findByCorreo(String correo) {
-        return UserMapper.toDTO(userRepository.findByCorreo(correo)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con correo: " + correo)));
+    public UserResponse findByUsername(String username) {
+        if (userRepository.findByUsername(username) != null) {
+            throw new UserNotFoundException("No existe un usuario con el correo: " + username);
+        }
+
+        return UserMapper.toDTO(userRepository.findByUsername(username));
     }
 
     @Override
     public UserResponse save(UserCreateRequest user) {
 
-        if (userRepository.findByCorreo(user.getCorreo()).isPresent()) {
+        if (userRepository.findByUsername(user.getCorreo()) != null) {
             throw new UserNotFoundException("Ya existe un usuario con el correo: " + user.getCorreo());
         }
 
@@ -54,5 +59,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponse> findAll() {
         return UserMapper.toDTOList(userRepository.findAll());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
     }
 }

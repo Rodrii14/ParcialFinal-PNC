@@ -34,11 +34,15 @@ public class TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     public TicketResponse createTicket(TicketCreateRequest ticket) {
-        var usuarioSolicitante = userRepository.findByCorreo(ticket.getCorreoUsuario())
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con correo: " + ticket.getCorreoUsuario()));
+        var usuarioSolicitante = userRepository.findByUsername(ticket.getCorreoUsuario());
+        if (usuarioSolicitante == null) {
+            throw new UserNotFoundException("Usuario no encontrado con correo: " + ticket.getCorreoUsuario());
+        }
 
-        var usuarioSoporte = userRepository.findByCorreo(ticket.getCorreoSoporte())
-                .orElseThrow(() -> new UserNotFoundException("Usuario asignado no encontrado con correo: " + ticket.getCorreoSoporte()));
+        var usuarioSoporte = userRepository.findByUsername(ticket.getCorreoSoporte());
+        if (usuarioSoporte == null) {
+            throw new UserNotFoundException("Usuario asignado no encontrado con correo: " + ticket.getCorreoUsuario());
+        }
 
         if (!usuarioSoporte.getNombreRol().equals(Rol.TECH.getValue())) {
             throw new BadTicketRequestException("El usuario asignado no es un técnico de soporte");
@@ -46,7 +50,7 @@ public class TicketServiceImpl implements TicketService {
 
         var ticketGuardado = ticketRepository.save(TicketMapper.toEntityCreate(ticket, usuarioSolicitante.getId(), usuarioSoporte.getId()));
 
-        return TicketMapper.toDTO(ticketGuardado, usuarioSolicitante.getCorreo(), usuarioSoporte.getCorreo());
+        return TicketMapper.toDTO(ticketGuardado, usuarioSolicitante.getUsername(), usuarioSoporte.getUsername());
     }
 
     @Override
@@ -58,8 +62,10 @@ public class TicketServiceImpl implements TicketService {
         var usuarioSolicitante = userRepository.findById(ticketExistente.getUsuarioId())
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-        var usuarioSoporte = userRepository.findByCorreo(ticket.getCorreoSoporte())
-                .orElseThrow(() -> new UserNotFoundException("Usuario asignado no encontrado con correo: " + ticket.getCorreoSoporte()));
+        var usuarioSoporte = userRepository.findByUsername(ticket.getCorreoSoporte());
+        if (usuarioSolicitante == null) {
+            throw new UserNotFoundException("Usuario no encontrado con correo: " + ticket.getCorreoSoporte());
+        }
 
         if (!usuarioSoporte.getNombreRol().equals(Rol.TECH.getValue())) {
             throw new BadTicketRequestException("El usuario asignado no es un técnico de soporte");
@@ -67,7 +73,7 @@ public class TicketServiceImpl implements TicketService {
 
         var ticketGuardado = ticketRepository.save(TicketMapper.toEntityUpdate(ticket, usuarioSoporte.getId(), ticketExistente));
 
-        return TicketMapper.toDTO(ticketGuardado, usuarioSolicitante.getCorreo(), usuarioSoporte.getCorreo());
+        return TicketMapper.toDTO(ticketGuardado, usuarioSolicitante.getUsername(), usuarioSoporte.getUsername());
     }
 
     @Override
@@ -89,7 +95,7 @@ public class TicketServiceImpl implements TicketService {
     var usuarioSoporte = userRepository.findById(ticketExistente.getTecnicoAsignadoId())
             .orElseThrow(() -> new UserNotFoundException("Usuario asignado no encontrado"));
 
-        return TicketMapper.toDTO(ticketExistente, usuarioSolicitante.getCorreo(), usuarioSoporte.getCorreo());
+        return TicketMapper.toDTO(ticketExistente, usuarioSolicitante.getUsername(), usuarioSoporte.getUsername());
     }
 
     @Override

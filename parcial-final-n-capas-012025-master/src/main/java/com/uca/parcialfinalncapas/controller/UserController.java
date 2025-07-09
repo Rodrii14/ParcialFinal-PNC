@@ -35,7 +35,7 @@ public class UserController {
 
     @GetMapping("/{correo}")
     public ResponseEntity<GeneralResponse> getUserByCorreo(@PathVariable String correo) {
-        UserResponse user = userService.findByCorreo(correo);
+        UserResponse user = userService.findByUsername(correo);
         return ResponseBuilderUtil.buildResponse("Usuario encontrado", HttpStatus.OK, user);
     }
 

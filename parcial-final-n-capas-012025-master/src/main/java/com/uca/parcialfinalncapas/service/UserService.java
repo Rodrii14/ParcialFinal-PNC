@@ -4,17 +4,18 @@ import com.uca.parcialfinalncapas.dto.request.UserCreateRequest;
 import com.uca.parcialfinalncapas.dto.request.UserUpdateRequest;
 import com.uca.parcialfinalncapas.dto.response.UserResponse;
 import com.uca.parcialfinalncapas.entities.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
     /**
      * Busca un usuario por su correo electrónico.
      *
-     * @param correo el correo electrónico del usuario a buscar
+     * @param username el correo electrónico del usuario a buscar
      * @return un objeto User si se encuentra, o null si no existe
      */
-    UserResponse findByCorreo(String correo);
+    UserResponse findByUsername(String username);
 
     /**
      * Guarda un nuevo usuario en la base de datos.
